@@ -21,7 +21,15 @@
  * THE SOFTWARE.
  */
 
-class Alanstormdotcom_Unremove_Model_Layout_Filter
+/**
+ * Layout filter model
+ *
+ * @category   Alanstormdotcom
+ * @package    Alanstormdotcom_Unremove
+ * @subpackage Model
+ * @author     Denis Obukhov <roomine@bolevar.com>
+ */
+class Alanstormdotcom_Unremove_Model_Layout_Filter extends Varien_Object
 {
     const ROOTNODE = 'root';
 

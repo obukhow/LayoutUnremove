@@ -41,7 +41,7 @@ THE SOFTWARE.
 					<alanstormdotcom_unremoveblock_observer>
 						<type>singleton</type>
 						<class>alanstormdotcomunremove/observer</class>
-						<method>handleLayoutUndo</method>
+						<method>handleLayoutUndoes</method>
 					</alanstormdotcom_unremoveblock_observer>
 				</observers>
 			</controller_action_layout_generate_xml_before>
