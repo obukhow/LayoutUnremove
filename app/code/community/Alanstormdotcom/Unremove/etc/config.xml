@@ -28,11 +28,11 @@ THE SOFTWARE.
 	</modules>
 	<global>
 		<models>
-			<alanstormdotcomunremove>
+			<unremove>
 				<class>
 					Alanstormdotcom_Unremove_Model
 				</class>
-			</alanstormdotcomunremove>
+			</unremove>
 		</models>
 		
 		<events>			
@@ -41,7 +41,7 @@ THE SOFTWARE.
 					<alanstormdotcom_unremoveblock_observer>
 						<type>singleton</type>
 						<class>alanstormdotcomunremove/observer</class>
-						<method>unremoveUpdate</method>
+						<method>handleLayoutUndo</method>
 					</alanstormdotcom_unremoveblock_observer>
 				</observers>
 			</controller_action_layout_generate_xml_before>

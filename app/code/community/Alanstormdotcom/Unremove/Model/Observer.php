@@ -23,81 +23,28 @@
 
 class Alanstormdotcom_Unremove_Model_Observer
 {
-    const ROOTNODE = 'root';
 
     /**
-     * Unremove update node from xml
+     * Unremove update node and unaction methods from xml
      *
      * @param Varien_Event_Observer $observer observer
      *
      * @return void
      */
-    public function unremoveUpdate(Varien_Event_Observer $observer)
+    public function handleLayoutUndoes(Varien_Event_Observer $observer)
     {
-        $update = $observer->getLayout()->getUpdate();          
+        $update = $observer->getLayout()->getUpdate();
         $originalUpdates = $update->asArray();         
-        $update->resetUpdates();            
-        
-        $toUnremove  = $this->_getUnremoveNames($this->_getSimplexmlFromFragment(implode('', $originalUpdates)));
+        $update->resetUpdates();
+
+        $filter = Mage::getModel('unremove/layout_filter');
+        $filter->setXml($originalUpdates)
+            ->addRemoveNodesFilter()
+            ->addActionMethodsFilter();
 
         foreach ($originalUpdates as $sXmlUpdate) {      
-            $sXmlUpdate = $this->_processUnremoveNodes($sXmlUpdate, $toUnremove);
+            $sXmlUpdate = $filter->filterUpdateNode($sXmlUpdate);
             $update->addUpdate($sXmlUpdate);
         }           
-    }
-    
-    /**
-     * Process removed nodes
-     *
-     * @param string $string     xml string
-     * @param array  $toUnremove blocks to unremove
-     *
-     * @return string
-     */
-    protected function _processUnremoveNodes($string, $toUnremove)
-    {
-        $oXmlUpdate = $this->_getSimplexmlFromFragment($string);
-        $nodes = $oXmlUpdate->xpath('//remove');
-        foreach ($nodes as $node) {
-            if (in_array($node['name'], $toUnremove)) {
-                unset($node['name']);
-            }               
-        }
-
-        $sXml = '';
-        foreach ($oXmlUpdate->children() as $node) {
-            $sXml .= $node->asXml();
-        }
-        return $sXml;
-
-    }
-    
-    /**
-     * Get unremove nodes names
-     *
-     * @param SimpleXMLElement $xml xml object
-     *
-     * @return array
-     */
-    protected function _getUnremoveNames($xml)
-    {
-        $nodes      = $xml->xpath('//unremove');
-        $unremove   = array();
-        foreach ($nodes as $node) {
-            $unremove[] = (string) $node['name'];
-        }               
-        return $unremove;
-    }
-    
-    /**
-     * Create xml object from string
-     *
-     * @param string $fragment fragment
-     *
-     * @return SimpleXMLElement
-     */
-    protected function _getSimplexmlFromFragment($fragment)
-    {
-        return simplexml_load_string('<'.self::ROOTNODE.'>'.$fragment.'</'.self::ROOTNODE.'>');     
     }
 }
