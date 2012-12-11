@@ -14,7 +14,7 @@ Here is the checkout.xml layout from base_default package.
 ```
 And you need to return left column back in your module.
 
-So you should create a layout for your module and add '<unremove>' tag to handle.
+So you should create a layout for your module and add 'unremove' tag to the handle.
 
 ```xml
     <checkout_multishipping translate="label">
