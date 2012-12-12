@@ -29,7 +29,7 @@
  * @subpackage Model
  * @author     Denis Obukhov <roomine@bolevar.com>
  */
-class Alanstormdotcom_Unremove_Model_Layout_Filter extends Varien_Object
+class Alanstormdotcom_Unremove_Model_Layout_Filter
 {
     const ROOTNODE = 'root';
 
@@ -41,6 +41,13 @@ class Alanstormdotcom_Unremove_Model_Layout_Filter extends Varien_Object
     protected $_filters = array();
 
     /**
+     * XML object
+     *
+     * @var SimpleXMLElement
+     */
+    protected $_xml;
+
+    /**
      * Set filter xml object
      *
      * @param array $updates updates array
@@ -49,7 +56,8 @@ class Alanstormdotcom_Unremove_Model_Layout_Filter extends Varien_Object
      */
     public function setXml(Array $updates)
     {
-        return $this->setData('xml', $this->_getSimplexmlFromFragment(implode('', $updates)));
+        $this->_xml = $this->_getSimplexmlFromFragment(implode('', $updates));
+        return $this;
     }
     
     /**
@@ -67,7 +75,7 @@ class Alanstormdotcom_Unremove_Model_Layout_Filter extends Varien_Object
             if (!$values) {
                 continue;
             }
-            $nodes = $oXmlUpdate->xpath('//' . $key);
+            $nodes = $oXmlUpdate->xpath("//$key");
             foreach ($nodes as $node) {
                 if (in_array($node[$attribute], $values)) {
                     unset($node[$attribute]);
@@ -93,7 +101,7 @@ class Alanstormdotcom_Unremove_Model_Layout_Filter extends Varien_Object
      */
     public function addNodeAttributesByPathFilter($path, $attribute)
     {
-        $nodes = $this->getXml()->xpath('//un' . $path);
+        $nodes = $this->getXml()->xpath("//un$path");
         $this->_filters[$path] = array(
             'attribute' => $attribute,
             'values'    => array(),
@@ -134,5 +142,15 @@ class Alanstormdotcom_Unremove_Model_Layout_Filter extends Varien_Object
     protected function _getSimplexmlFromFragment($fragment)
     {
         return simplexml_load_string('<'.self::ROOTNODE.'>'.$fragment.'</'.self::ROOTNODE.'>');     
+    }
+
+    /**
+     * Get layout XML object
+     *
+     * @return SimpleXMLElement
+     */
+    public function getXml()
+    {
+        return $this->_xml;
     }
 }
